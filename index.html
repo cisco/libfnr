@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Libfnr by sashank</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Libfnr</h1>
+        <p>FNR is a small domain block cipher to encrypt small domain objects ( &lt; 128 bits ) like IPv4, MAC, Credit Card numbers etc.</p>
+
+        <p class="view"><a href="https://github.com/sashank/libfnr">View the Project on GitHub <small>sashank/libfnr</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/sashank/libfnr/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/sashank/libfnr/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/sashank/libfnr">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <pre><code>libFNR - A reference implementation library for FNR encryption scheme.
+
+FNR represents "Flexible Naor and Reingold" 
+
+FNR is a small domain block cipher to encrypt small domain
+objects ( &lt; 128 bits ) like IPv4, MAC, Credit Card numbers etc.
+
+FNR is designed by Sashank Dara (sadara@cisco.com), Scott Fluhrer (sfluhrer@cisco.com)
+
+Copyright (C) 2014 , Cisco Systems Inc.
+
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License as published by the Free Software Foundation; either
+version 2.1 of the License, or (at your option) any later version.
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public
+License along with this library; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+</code></pre>
+
+<p>Quick Tour of this package</p>
+
+<p>README -- this file</p>
+
+<p>INSTALL -- 
+  NOTE : openssl latest version (&gt; openssl-1.0.1e) needs to be installed
+  Steps
+      source bootstrap.sh (optional)
+     ./configure --enable-debug=yes
+      make
+      make install</p>
+
+<p>RUN
+     cd test
+     ./ipv4test -p password -t  tweak -f raw–ips</p>
+
+<p>LICENSE -- LGPL (2.1) license copy under which this library is being released
+  HOWTO   -- How to write applications using libfnr
+  doc/Spec - Details of Encryption specification</p>
+
+<p>src/fnr.c fnr.h has the core implementation of FNR 
+  test/test_ipv.c has the demo application on using FNR </p>
+
+<p>Report bugs to <a href="mailto:libfnr-dev@external.cisco.com">libfnr-dev@external.cisco.com</a></p>
+
+<p>IMPORTANT:  This is an <em>experimental</em> cipher, not for production yet. </p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/sashank">sashank</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
