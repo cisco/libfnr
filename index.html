@@ -39,7 +39,8 @@ objects (&lt; 128 bits) like IPv4 addresses, MAC addreses,
 Serial numbers, Account ids, Credit Card numbers etc.
 while preserving their lengths (and formats if needed)
 
-IMPORTANT:  This is an <em>experimental</em> cipher 
+IMPORTANT:  This is an <em>experimental</em> cipher <br>
+FNR represents "<strong>F</strong>lexible <strong>N</strong>aor and <strong>R</strong>eingold"
 </code></pre>
 <h1> Motivation </h1>
 <p>
@@ -90,31 +91,28 @@ This also lends itself nicely to achieving <em>searchable encryption </em> opera
  Due to the length preserving nature in FNR, it is a better fit in some scenarios than cryptdb, as the cryptdb method expands the data size, resulting in bandwidth and storage savings. </p>
 
 <h4> References </h4>
+<small>
 [1] Bellare, Mihir, et al. "Format-preserving encryption." Selected Areas in Cryptography. Springer Berlin Heidelberg, 2009
 <br>
 [2] Dworkin, Morris. "Recommendation for Block Cipher Modes of Operation: Methods for Format-Preserving Encryption." NIST Special Publication 800: 38G.
 <br>
 [3] Naor, Moni, and Omer Reingold. “On the Construction of Pseudorandom Permutations: Luby—Rackoff Revisited.” Journal of Cryptology 12.1 (1999): 29-66
+</small>
 <br>
 <br>
 <h4> Acknowledgements </h4>
-
+<small>
 <p>
-FNR represents "<strong>F</strong>lexible <strong>N</strong>aor and <strong>R</strong>eingold"
-</p>
-<p>
+<br>
 FNR is designed by <br>
-Sashank Dara (sadara@cisco.com), <br>
-Scott Fluhrer (sfluhrer@cisco.com)<br>
-
-</p>
-<p>
+Sashank Dara (sadara@cisco.com), Scott Fluhrer (sfluhrer@cisco.com)<br>
 Copyright (C) 2014 , Cisco Systems Inc.<br>
-</p>
-<p>
 This library is released under LGPLv2<br> </p>
 <p>Report bugs to <a href="mailto:libfnr-dev@external.cisco.com">libfnr-dev@external.cisco.com</a></p>
-
+</small>
+<p>
+<em>Keywords</em> <small> block cipher, length preserving, format preserving, cloud privacy, data anonymization, searchable encryption </small>
+</p>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/sashank">sashank</a></p>
