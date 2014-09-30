@@ -1,0 +1,126 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Libfnr by sashank</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Libfnr</h1>
+        <p>FNR is an experimental small domain block cipher designed by Cisco Systems Inc. </p>
+
+        <p class="view"><a href="https://github.com/sashank/libfnr">View the Project on GitHub <small>sashank/libfnr</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/sashank/libfnr/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/sashank/libfnr/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/sashank/libfnr">View On <strong>GitHub</strong></a></li>
+        </ul>
+        <a href="https://scan.coverity.com/projects/2501">
+         <img alt="Coverity Scan Build Status"
+              src="https://scan.coverity.com/projects/2501/badge.svg"/>
+        </a>
+      </header>
+      <section>
+        <pre><code>libFNR - A reference implementation for FNR encryption scheme.
+
+FNR is a block cipher to encrypt small domain
+objects (&lt; 128 bits) like IPv4 addresses, MAC addreses,
+Serial numbers, Account ids, Credit Card numbers etc.
+while preserving their lengths (and formats if needed)
+
+FNR is accepted for <a href="http://cse.iitkgp.ac.in/conf/SPACE2014/"> SPACE-2014 conference</a>
+
+IMPORTANT:  This is an <em>experimental</em> cipher <br>
+FNR represents "<strong>F</strong>lexible <strong>N</strong>aor and <strong>R</strong>eingold"
+</code></pre>
+<h1> Motivation </h1>
+<p>
+Cloudification of application stacks, legacy systems, databases etc. has many benefits but ensuring privacy of sensitive fields might become messier and challenging. 
+Such privacy preserving efforts involves identification of sensitive fields in the system and re-engineering such data fields in order to encrypt them. </p> <br>
+<p>
+For example, a data field might be well-defined for accommodating IPv4 address of size 32 bits with number of validations throughout the application stack (and/or database)  to ensure the input data is in fact IPv4 address. 
+
+In order to preserve the privacy of this field using traditional AES-128 scheme it has to be re-engineered to accommodate 128 bits of memory instead of 32 bits.  Also any validations that identifies the type of the data (dotted notation of IPv4 address) needs to be removed in order to accommodate a random cipher string of encrypted IPv4 address. </p> <br> 
+
+<p> While the length expansion of the field needs more storage (and/or bandwidth) the removal of validations might open up serious security vulnerabilities in the form of injection attacks. The same issue is applicable while ensuring privacy of any sensitive fields like <em> MAC addresses, Email addresses, Usernames, Account numbers, Serial Numbers, SSN, Credit Card numbers etc.</em></p>
+<h2> FNR encryption </h2>
+<p>
+In order to address above challenges, we may need to preserve the length and formats of the data types to avoid any validation failures in the application stack. 
+These challenges could be solved with our recently proposed FNR encryption scheme.   FNR is flexible encryption scheme that does not expand the length of input data upon encryption.  
+</p>
+<h3> Blue Print </h3>
+<p>
+The blue print of the scheme is based on well studied theoretical constructs called as Feistel networks and Pair-wise independent functions.  While there are many similar schemes proposed based on Feistel networks [1][2], the one proposed by Naor and Reingold [3] is proven to provide good security bounds than classic Feistel networks.  
+We have modified it to make the scheme more flexible for practical implementation without losing the security guarantees.
+More about this inside our <a href="https://eprint.iacr.org/2014/421">specification</a>.
+<h3> Tweakable </h3>
+FNR encryption scheme is tweakable in nature.  A tweak is additional input to the block cipher along with the plain text and key. 
+The tweak is more like cryptographic salt and could be made public. It offers additional randomness to the cipher text.  Since the FNR is intended to use for smaller data types, a tweak is designed inbuilt .
+</p>
+<h2> Preserving Formats </h2>
+<p>
+In order to preserve the formats of input data types we need  ranking functions (along with  length preserving encryption schemes).   
+<strong>Ranking functions</strong>, as the researchers say[2], is a <em>folklore</em> approach to preserve the formats of the data types. </p>
+<p>
+For example, an <em>IPv4 address </em> could be ranked as a 32 bits integer. The ranked integer is then encrypted using a block cipher like FNR to result in another 32 bits integer. The resultant cipher text is converted back to dotted notation of <em>IPv4 address</em> in order to preserve the format. Similar approach could be pursued for other data types like <em>IPv6, MAC</em> addresses etc. Note that since <em>IPv6 address</em> is 128 bits in length traditional AES-128 itself could be used to both encrypt and preserve the <em>IPv6 address</em> format. 
+</p> <p>
+For input data types such as <em>Email addresses </em> the ranking technique does not hold good though. A trivial approach to preserve the formats of email addresses is to encrypt user id and domain separately but that may not be secure enough. For data types like  <em> usernames </em> , <em>  arbitrary short strings </em>  of <strong>PII</strong> (Personally Identifiable Information) nature, but no specific format,  could be encrypted as is with FNR scheme. </p>
+<h2> Anonymization for Cloud </h2>
+<p> When FNR is used in ECB mode, it realizes a deterministic encryption scheme. 
+Like all deterministic encryption methods, this does not provide semantic security, but determinism is needed in situations where <em>anonymizing</em> telemetry and log data. 
+</p>
+<p>
+Especially in cloud based network monitoring scenarios it is necessary to anonymize the sensitive internal IPv4 addresses in NETFLOW/IPFIX packets while retaining the ability to perform analytics and correlations needed for network monitoring.  
+</p>
+<p>
+Imagine a cloud based networking monitoring application that correlates NETFLOW packets with weblogs and/or syslogs in order to identify any malicious behavior.
+An anonymized IPv4 address from a NETFLOW packet may be needed to be correlated with events originating from a firewall or IPS sensor. In such scenarios deterministically encrypting an internal IPv4 address would be useful to ensure successful correlations while preserving the privacy of data in cloud.
+</p>
+<h2> Searchable Encryption </h2>
+<p>
+This also lends itself nicely to achieving <em>searchable encryption </em> operations such as provided in the <a href="http://css.csail.mit.edu/cryptdb/">cryptdb</a> project.
+ Due to the length preserving nature in FNR, it is a better fit in some scenarios than cryptdb, as the cryptdb method expands the data size, resulting in bandwidth and storage savings. </p>
+
+<h4> References </h4>
+<small>
+[1] Bellare, Mihir, et al. "Format-preserving encryption." Selected Areas in Cryptography. Springer Berlin Heidelberg, 2009
+<br>
+[2] Dworkin, Morris. "Recommendation for Block Cipher Modes of Operation: Methods for Format-Preserving Encryption." NIST Special Publication 800: 38G.
+<br>
+[3] Naor, Moni, and Omer Reingold. “On the Construction of Pseudorandom Permutations: Luby—Rackoff Revisited.” Journal of Cryptology 12.1 (1999): 29-66
+</small>
+<br>
+<br>
+<h4> Acknowledgements </h4>
+<small>
+<p>
+<br>
+FNR is designed by <br>
+Sashank Dara (sadara@cisco.com), Scott Fluhrer (sfluhrer@cisco.com)<br>
+Copyright (C) 2014 , Cisco Systems Inc.<br>
+This library is released under LGPLv2<br> </p>
+<p>Report bugs to <a href="mailto:libfnr-dev@external.cisco.com">libfnr-dev@external.cisco.com</a></p>
+</small>
+<p>
+Keywords: <em>block cipher, length preserving, format preserving, cloud privacy, data anonymization, searchable encryption </em></small>
+</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/sashank">sashank</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+  </body>
+</html>
