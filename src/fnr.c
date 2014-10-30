@@ -183,7 +183,8 @@ static int next_bit(struct pwip_stream *ctx) {
             /* will be distinct from either the AES evaluations we do during */
             /* tweak expansion, or during the LR rounds */
 
-        encrypt(block,4,ctx->buffer, ctx->key->aes_key);
+        //encrypt(block,4,ctx->buffer, ctx->key->aes_key);
+	AES_encrypt(block, ctx->buffer, &ctx->key->expanded_aes_key);
 
         ctx->index = 0; ctx->bit_count = 0;
     }
@@ -596,7 +597,8 @@ void FNR_expand_tweak(fnr_expanded_tweak *expanded_tweak,
             /* will be distinct from either the AES evaluations we do during */
             /* PWIP selection, or during the LR rounds */
 
-        encrypt(block,n+1,block, key->aes_key);
+        //encrypt(block,n+1,block, key->aes_key);
+	AES_encrypt(block, block, &key->expanded_aes_key);
         n = 0;
 
     } while (len_tweak > 0);
@@ -745,7 +747,8 @@ static void FNR_operate(const fnr_expanded_key *key,const fnr_expanded_tweak *tw
          * ciphertext block that is a complex function of the tweak, the round
          * number and the stirred in data bits
          */
-        encrypt(block,input_len,block, key->aes_key);
+        //encrypt(block,input_len,block, key->aes_key);
+	AES_encrypt(block, block, &key->expanded_aes_key);
 
         /*
          * Step 4: swap the 'active bits' (so that if the even bits were
