@@ -9,8 +9,11 @@
   INSTALL -- 
   NOTE : openssl latest version (> openssl-1.0.1e) needs to be installed
   Steps
+  
       source bootstrap.sh (optional)
+      
      ./configure --enable-debug=yes
+      
       make
 
    RUN
