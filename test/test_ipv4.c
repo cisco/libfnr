@@ -56,16 +56,13 @@ unsigned int ipv4_rank(char * ip_str){
 }
 
 /*convert the raw IP from unsigned int format to a.b.c.d format.*/
-char * ipv4_derank(unsigned int ip){
+int ipv4_derank(char* ip_str, unsigned int ip){
     unsigned int a,b,c,d;
-    char * ip_str = (char *)calloc(16, 1);
     a = ip >> 24;
     b = (ip << 8) >> 24;
     c = (ip << 16) >> 24;
     d = (ip << 24) >> 24;
-
-    sprintf(ip_str, "%d.%d.%d.%d", a, b, c, d);
-    return ip_str;
+    return snprintf(ip_str, 16, "%d.%d.%d.%d", a, b, c, d);
 }
 
 int main(int argc, char * argv[]) {
@@ -77,7 +74,7 @@ int main(int argc, char * argv[]) {
     unsigned int num_ip_addresses = 0, loop_count = 0;
     char no_ip_str[10];
 #ifdef DEBUG
-    char *ip_address_str = NULL;
+    char ip_address_str[16];
 #endif
 
     if (argc != 7) {
@@ -162,25 +159,22 @@ int main(int argc, char * argv[]) {
         encrypted_addr = raw_addr = p_raw_addr[loop_count];
 
 #ifdef DEBUG
-        ip_address_str = ipv4_derank(raw_addr);
+        ipv4_derank(ip_address_str, raw_addr);
         printf("Input\t\t%s\n", ip_address_str);
-        free(ip_address_str);
 #endif
 
         FNR_encrypt(key, &tweak, &raw_addr, &encrypted_addr);
 
 #ifdef DEBUG
-        ip_address_str = ipv4_derank(encrypted_addr);
+        ipv4_derank(ip_address_str, encrypted_addr);
         printf("Ciphertext\t%s\n", ip_address_str);
-        free(ip_address_str);
 #endif
 
         FNR_decrypt(key, &tweak, &encrypted_addr, &raw_addr);
 
 #ifdef DEBUG
-        ip_address_str = ipv4_derank(raw_addr);
+        ipv4_derank(ip_address_str, raw_addr);
         printf("Plaintext\t%s\n", ip_address_str);
-        free(ip_address_str);
         printf("-----------------------------------------------------------\n");
 
         if(raw_addr != p_raw_addr[loop_count]){
