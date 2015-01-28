@@ -31,37 +31,6 @@
 		encrypted_data = NULL; \
 	} 
 
-#if 0
-unsigned long long int number;
-
-unsigned long long int string_rank (char *string) 
-{
-	number = 0;
-	unsigned short i = 0;
-	unsigned short str_len = strlen (string);
-
-	while (string[i] != '\0') {
-		str_len = str_len - 1;
-		number = number + ((int) (string[i]) << str_len);
-		i = i + 1;
-	}
-
-	return number;
-}
-
-char decrypted_str[1024] = {0};
-
-char *string_derank (unsigned long long int dec, unsigned short str_len) 
-{
-	while (str_len > 0) {
-		str_len = str_len - 1;
-		printf ("%c ", (char) (dec >> str_len));
-	}
-
-	return decrypted_str;
-}
-#endif
-
 static int generate_master_key (char *passwd, char *key) 
 {
 	unsigned char salt[16];
@@ -84,11 +53,6 @@ int main (int argc, char *argv[])
 	char *tweak_str = NULL;
 	char *raw_data = NULL;
 	char *encrypted_data = NULL;
-
-	/*
-	 * unsigned long long int encrypted_data = 0;
-	 * unsigned long long int raw_data = 0;
-	 */
 
 	static unsigned char orig_key[32] = {0};
 
@@ -148,11 +112,6 @@ int main (int argc, char *argv[])
 		}
 	}
 
-#if 0
-	printf ("passwd = %s, tweak_str = %s, string = %s\n", 
-			passwd, tweak_str, string);
-#endif
-
 	FNR_init ();	
 
 	if (generate_master_key (passwd, (char *) orig_key) == 0) {
@@ -173,24 +132,12 @@ int main (int argc, char *argv[])
 
 	FNR_expand_tweak (&tweak, key, (void *) tweak_str, strlen (tweak_str));
 
-	/*
-	 * raw_data = string_rank (string);
-	 * printf ("Unencrypted raw_data = %llu\n", raw_data);
-	 */
-
 	strcpy (raw_data, string); 
 	FNR_encrypt (key, &tweak, raw_data, encrypted_data);
 
 	printf ("Encrypted data: %s\n", encrypted_data);
 	FNR_decrypt (key, &tweak, encrypted_data, raw_data);
 	printf ("Decrypted data: %s\n", raw_data);
-
-	/*if (string_rank (string) == raw_data) {
-		printf ("Decrypted string: %s\n", string);
-	} else {
-		printf ("Something went wrong. "
-				"String mismatch after FNR_decrypt.\n");
-	}*/
 
 	FREE_ENCRYPTED_DATA;
 	FREE_RAW_DATA;
