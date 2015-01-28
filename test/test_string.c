@@ -122,7 +122,7 @@ int main (int argc, char *argv[])
 	}
 
 	key = FNR_expand_key (orig_key, AES_KEY_SIZE, 
-			NUM_BITS * strlen (string));//may need to sanitize 'string' first
+			NUM_BITS * strlen (string));
 	if (key == NULL) {
 		fprintf (stderr, "Error expanding key\n");
 		FREE_ENCRYPTED_DATA;
