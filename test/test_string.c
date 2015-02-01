@@ -23,6 +23,12 @@
 #define MAX_DATA_LEN 1024
 #define ARGS_LIST_COUNT 7
 
+#define FREE_STRING \
+	if (string != NULL) {\
+		free (string); \
+		string = NULL; \
+	}
+
 #define FREE_RAW_DATA \
 	if (raw_data != NULL) { \
 		free (raw_data); \
@@ -153,6 +159,7 @@ int main (int argc, char *argv[])
 				NUM_BITS * str_len);
 		if (key == NULL) {
 			fprintf (stderr, "Error expanding key\n");
+			FREE_STRING;
 			FREE_ENCRYPTED_DATA;
 			FREE_RAW_DATA;
 			return FAILURE;
@@ -176,7 +183,7 @@ int main (int argc, char *argv[])
 		printf ("Could not calculate processor time.\n");
 	}
 
-	free (string);
+	FREE_STRING;
 	FREE_ENCRYPTED_DATA;
 	FREE_RAW_DATA;
 	FNR_release_key (key);
