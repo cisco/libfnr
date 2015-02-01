@@ -8,12 +8,16 @@
 #include <string.h>
 #include <malloc.h>
 #include <openssl/evp.h>
+#include <time.h>
 #include "fnr.h"
 
+#define TRUE 1
+#define FALSE 0
 #define SUCCESS 0
 #define FAILURE 1
 #define KEYLEN 16
 #define NUM_BITS 8
+#define MAX_BYTES 16
 #define ITERATION 1000
 #define AES_KEY_SIZE 128
 #define MAX_DATA_LEN 1024
@@ -47,13 +51,24 @@ static int generate_master_key (char *passwd, char *key)
 int main (int argc, char *argv[])
 {
 	int c;
+	int count = 0;
+	int flag = FALSE;
+
+	size_t len = 0;
+	size_t str_len;
+	ssize_t read;
+	clock_t start;
+	clock_t end;
+	double cpu_time;
 
 	char *string = NULL;
 	char *passwd = NULL;
 	char *tweak_str = NULL;
+	char *filename = NULL;
 	char *raw_data = NULL;
 	char *encrypted_data = NULL;
 
+	FILE * stream = NULL;
 	static unsigned char orig_key[32] = {0};
 
 	fnr_expanded_key *key = NULL;
@@ -61,7 +76,7 @@ int main (int argc, char *argv[])
 
 	if (argc != ARGS_LIST_COUNT) {
 		fprintf (stderr, "Usage: ./test/stringtest -p <password> -t <tweak> "
-				"-s <string>\n");
+				"-f <filename>\n");
 		return FAILURE;
 	}
 
@@ -78,7 +93,7 @@ int main (int argc, char *argv[])
 		return FAILURE;
 	}
 
-	while ((c = getopt (argc, argv, "p:t:s:")) != -1) {
+	while ((c = getopt (argc, argv, "p:t:f:")) != -1) {
 		switch (c) {
 			case 'p':
 				passwd = optarg;
@@ -88,28 +103,25 @@ int main (int argc, char *argv[])
 				tweak_str = optarg;
 				break;
 
-			case 's':
-				string = optarg;
+			case 'f':
+				filename = optarg;
 				break;
 
-			case '?':
-				if (optopt == 'c')
-					fprintf (stderr, "Option -%c requires an argument\n", optopt);
-				else if (isprint (optopt))
-					fprintf (stderr, "Unknown option '-%c'\n", optopt);
-				else 
-					fprintf (stderr, "Unknown option character '\\x%x'\n", optopt);
-				FREE_ENCRYPTED_DATA;
-				FREE_RAW_DATA;
-				return FAILURE;
-
 			default:
-				fprintf (stderr, "Usage: %s -p <password> -t <tweak> "
-						"-s <string>", argv[0]);
+				fprintf (stderr, "Usage: ./test/stringtest -p <password> -t <tweak> "
+						"-f <filename>");
 				FREE_ENCRYPTED_DATA;
 				FREE_RAW_DATA;
 				return FAILURE;
 		}
+	}
+
+	stream = fopen (filename, "r");
+	if (stream == NULL) {
+		FREE_ENCRYPTED_DATA;
+		FREE_RAW_DATA;
+		perror ("fopen");
+		exit (EXIT_FAILURE);
 	}
 
 	FNR_init ();	
@@ -121,24 +133,50 @@ int main (int argc, char *argv[])
 		return FAILURE;
 	}
 
-	key = FNR_expand_key (orig_key, AES_KEY_SIZE, 
-			NUM_BITS * strlen (string));
-	if (key == NULL) {
-		fprintf (stderr, "Error expanding key\n");
-		FREE_ENCRYPTED_DATA;
-		FREE_RAW_DATA;
-		return FAILURE;
+	start = clock();
+	if (start == -1) {
+		flag = TRUE;
 	}
 
-	FNR_expand_tweak (&tweak, key, (void *) tweak_str, strlen (tweak_str));
+	while ((read = getline (&string, &len, stream)) != -1) {
+		count++;
+		str_len = strlen (string);
+		string[str_len - 1] = '\0';
+		str_len--;
+		if (str_len > MAX_BYTES) {
+			fprintf (stderr, "Cannot encrypt for entry #: %d, "
+					"length more than %d bytes.\n", count, MAX_BYTES);
+			continue;
+		}
 
-	strcpy (raw_data, string); 
-	FNR_encrypt (key, &tweak, raw_data, encrypted_data);
+		key = FNR_expand_key (orig_key, AES_KEY_SIZE, 
+				NUM_BITS * str_len);
+		if (key == NULL) {
+			fprintf (stderr, "Error expanding key\n");
+			FREE_ENCRYPTED_DATA;
+			FREE_RAW_DATA;
+			return FAILURE;
+		}
 
-	printf ("Encrypted data: %s\n", encrypted_data);
-	FNR_decrypt (key, &tweak, encrypted_data, raw_data);
-	printf ("Decrypted data: %s\n", raw_data);
+		FNR_expand_tweak (&tweak, key, (void *) tweak_str, strlen (tweak_str));
 
+		strcpy (raw_data, string); 
+		FNR_encrypt (key, &tweak, raw_data, encrypted_data);
+		printf ("Encrypted data: %s\n", encrypted_data);
+
+		FNR_decrypt (key, &tweak, encrypted_data, raw_data);
+		printf ("Decrypted data: %s\n", raw_data);
+	}
+
+	end = clock();
+	if ((end != -1) && (flag == FALSE)) {
+		cpu_time = ((double) (end - start)) / CLOCKS_PER_SEC;
+		printf ("cpu time used: %.3f seconds.\n", cpu_time);
+	} else {
+		printf ("Could not calculate processor time.\n");
+	}
+
+	free (string);
 	FREE_ENCRYPTED_DATA;
 	FREE_RAW_DATA;
 	FNR_release_key (key);
