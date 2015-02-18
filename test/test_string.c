@@ -112,6 +112,7 @@ int main (int argc, char *argv[])
 		flag = TRUE;
 	}
 
+	printf ("\n");
 	while (fscanf (stream, "%d-%d-%dT%d:%d:%d",
 				&yr, &mn, &dt, &hr, &min, &sec) != EOF) {
 		t.tm_year = yr - 1900;
@@ -128,6 +129,7 @@ int main (int argc, char *argv[])
 			fclose (stream);
 			return FAILURE;
 		}
+		printf ("Date: %s", ctime (&t_of_day));
 		printf ("Epoch value: %ld\n", t_of_day);
 
 		key = FNR_expand_key (orig_key, AES_KEY_SIZE, 
@@ -146,15 +148,15 @@ int main (int argc, char *argv[])
 
 		FNR_decrypt (key, &tweak, &encrypted_data, &raw_data);
 		printf ("Decrypted data: %ld\n", raw_data);
-		printf ("\n");
+		printf ("Date: %s\n", ctime (&raw_data));
 	}
 
 	end = clock();
 	if ((end != -1) && (flag == FALSE)) {
 		cpu_time = ((double) (end - start)) / CLOCKS_PER_SEC;
-		printf ("cpu time used: %.3f seconds.\n", cpu_time);
+		printf ("cpu time used: %.3f seconds.\n\n", cpu_time);
 	} else {
-		printf ("Could not calculate processor time.\n");
+		printf ("Could not calculate processor time.\n\n");
 	}
 
 	fclose (stream);
