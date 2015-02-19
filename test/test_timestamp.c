@@ -131,6 +131,7 @@ int main (int argc, char *argv[])
 		exit (EXIT_FAILURE);
 	}
 
+	/* Init */
 	FNR_init ();	
 
 	if (generate_master_key (passwd, (char *) orig_key) == 0) {
@@ -138,6 +139,16 @@ int main (int argc, char *argv[])
 		fclose (stream);
 		return FAILURE;
 	}
+
+	key = FNR_expand_key (orig_key, AES_KEY_SIZE, 
+			NUM_BITS * sizeof (t_of_day));
+	if (key == NULL) {
+		fprintf (stderr, "Error expanding key\n");
+		fclose (stream);
+		return FAILURE;
+	}
+
+	FNR_expand_tweak (&tweak, key, (void *) tweak_str, strlen (tweak_str));
 
 	start = clock();
 	if (start == -1) {
@@ -163,16 +174,6 @@ int main (int argc, char *argv[])
 		}
 		printf ("Date: %s", ctime (&t_of_day));
 		printf ("Epoch value: %ld\n", t_of_day);
-
-		key = FNR_expand_key (orig_key, AES_KEY_SIZE, 
-				NUM_BITS * sizeof (t_of_day));
-		if (key == NULL) {
-			fprintf (stderr, "Error expanding key\n");
-			fclose (stream);
-			return FAILURE;
-		}
-
-		FNR_expand_tweak (&tweak, key, (void *) tweak_str, strlen (tweak_str));
 
 		raw_data = t_of_day;
 		FNR_encrypt (key, &tweak, &raw_data, &encrypted_data);
