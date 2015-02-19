@@ -32,8 +32,8 @@
 
 /*
  * @pyav : Application to test timestamp encryption in fnr mode.
- * 		   The format of the date in provided file should be as following:
- * 		   2004-09-16T23:59:58
+ *         The format of the date in provided file should be as following:
+ *         2004-09-16T23:59:58
  */
 
 #include <stdio.h>
