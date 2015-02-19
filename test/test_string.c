@@ -145,6 +145,7 @@ int main (int argc, char *argv[])
 		raw_data = t_of_day;
 		FNR_encrypt (key, &tweak, &raw_data, &encrypted_data);
 		printf ("Encrypted data: %ld\n", encrypted_data);
+		printf ("Encrypted date string: %s", ctime (&encrypted_data));
 
 		FNR_decrypt (key, &tweak, &encrypted_data, &raw_data);
 		printf ("Decrypted data: %ld\n", raw_data);
