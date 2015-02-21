@@ -10,8 +10,8 @@
  *
  *    test_timestamp.c is written by Anand Verma [verma.anand09@gmail.com].
  *	  
- *	  Thanks to Prakruti C [prak1090@gmail.com] for providing reference 
- *	  code in c++ for date format conversions.
+ *    Thanks to Prakruti C [prak1090@gmail.com] for providing reference 
+ *    code in c++ for date format conversions.
  *
  *    Copyright (C) 2014 , Cisco Systems Inc.
  *
