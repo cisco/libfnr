@@ -56,6 +56,12 @@
 #define MAX_DATA_LEN 1024
 #define ARGS_LIST_COUNT 7
 
+#define FREE_MEM(X) \
+	if (X != NULL) { \
+		free (X); \
+		X = NULL; \
+	}
+
 static int generate_master_key (char *passwd, char *key) 
 {
 	unsigned char salt[16];
@@ -80,7 +86,10 @@ int main (int argc, char *argv[])
 	int min;
 	int sec;
 
-	char *string = NULL;
+	char *datestr = NULL;
+	size_t len = 0;
+	size_t str_len;
+	ssize_t read;
 	char *passwd = NULL;
 	char *tweak_str = NULL;
 	char *filename = NULL;
@@ -156,8 +165,16 @@ int main (int argc, char *argv[])
 	}
 
 	printf ("\n");
-	while (fscanf (stream, "%d-%d-%dT%d:%d:%d",
-				&yr, &mn, &dt, &hr, &min, &sec) != EOF) {
+	while ((read = getline (&datestr, &len, stream)) != -1) {
+		str_len = strlen (datestr);
+		datestr[str_len - 1] = '\0';
+		str_len--;
+		if (sscanf (datestr, "%d-%d-%dT%d:%d:%d", 
+					&yr, &mn, &dt, &hr, &min, &sec) != 6) {
+			perror ("sscanf");
+			continue;
+		}
+
 		t.tm_year = yr - 1900;
 		t.tm_mon = mn - 1;
 		t.tm_mday = dt;
@@ -170,6 +187,7 @@ int main (int argc, char *argv[])
 		if (t_of_day == -1) {
 			perror ("mktime");
 			fclose (stream);
+			FREE_MEM(datestr);
 			return FAILURE;
 		}
 		printf ("Date: %s", ctime (&t_of_day));
@@ -194,6 +212,7 @@ int main (int argc, char *argv[])
 	}
 
 	fclose (stream);
+	FREE_MEM (datestr);
 	FNR_release_key (key);
 	FNR_shut ();
 	return SUCCESS;
