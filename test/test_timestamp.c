@@ -165,7 +165,7 @@ int main (int argc, char *argv[])
 			datestr[len - 1] = '\0';
 			if (sscanf (datestr, "%d-%d-%dT%d:%d:%d", 
 						&yr, &mn, &dt, &hr, &min, &sec) != 6) {
-				perror ("sscanf");
+				fprintf (stderr, "sscanf didn't read six elements\n");
 				continue;
 			}
 			t.tm_year = yr - 1900;
