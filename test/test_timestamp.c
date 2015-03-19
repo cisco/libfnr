@@ -42,6 +42,7 @@
 #include <string.h>
 #include <openssl/evp.h>
 #include <time.h>
+#include <inttypes.h>
 #include "fnr.h"
 
 #define TRUE 1
@@ -92,8 +93,10 @@ int main (int argc, char *argv[])
 	clock_t end;
 	double cpu_time;
 	time_t t_of_day;
-	time_t raw_data;
-	time_t encrypted_data;
+	time_t time_t_data;
+	uint32_t raw_data;
+	uint32_t encrypted_data;
+	uint32_t time;
 	struct tm t;
 	FILE * stream = NULL;
 	static unsigned char orig_key[32] = {0};
@@ -185,14 +188,21 @@ int main (int argc, char *argv[])
 			printf ("Date: %s", ctime (&t_of_day));
 			printf ("Epoch value: %ld\n", t_of_day);
 
-			raw_data = t_of_day;
+			time = htonl ((uint32_t) t_of_day);
+			printf ("htonl (t_of_day) = %" PRIu32 "\n", time);
+
+			raw_data = time;
 			FNR_encrypt (key, &tweak, &raw_data, &encrypted_data);
-			printf ("Encrypted data: %ld\n", encrypted_data);
-			printf ("Encrypted date string: %s", ctime (&encrypted_data));
+			printf ("Encrypted data: %" PRIu32 "\n", encrypted_data);
+			time_t_data = (time_t) encrypted_data;
+			printf ("Encrypted date string: %s", ctime (&time_t_data));
 
 			FNR_decrypt (key, &tweak, &encrypted_data, &raw_data);
-			printf ("Decrypted data: %ld\n", raw_data);
-			printf ("Date: %s\n", ctime (&raw_data));
+			printf ("Decrypted data: %" PRIu32 "\n", raw_data);
+			raw_data = ntohl (raw_data);
+			printf ("htonl (raw_data)  = %" PRIu32 "\n", raw_data);
+			time_t_data = (time_t) raw_data;
+			printf ("Date: %s\n", ctime (&time_t_data));
 		} else {
 			break;
 		}
