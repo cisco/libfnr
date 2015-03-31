@@ -4,7 +4,7 @@
   FNR represents "Flexible Naor and Reingold" 
 
   FNR is a small domain block cipher for encrypting
-    objects ( < 128 bits ) like IPv4, MAC, Credit Card numbers etc.
+    objects ( < 128 bits ) like IPv4, MAC, Credit Card numbers, Time Stamps etc.
 
   INSTALL -- 
   NOTE : openssl latest version (> openssl-1.0.1e) needs to be installed
