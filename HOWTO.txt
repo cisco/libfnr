@@ -33,7 +33,7 @@
          the msbits of that unsigned char are assumed not to be a part of the
          plaintext/ciphertext
  
-  Now, encryption/decryption is determanistic; if we encrypt the same
+  Now, encryption/decryption is deterministic; if we encrypt the same
   plaintext twice with the same key and tweak, you will always get the same
   ciphertext.  This is a side effect of not having any ciphertext expansion,
   there are 2N possible plaintexts and 2N possible ciphertexts, and so
@@ -52,10 +52,10 @@
   must be a value between 1 and 128 bits.  Why anyone would want to encrypt
   a 1 bit block, I have no idea, but still...
  
-  You can reuse this key everytime you need to encrypt or decrypt with this
+  You can reuse this key every time you need to encrypt or decrypt with this
   key and this block size.  If you want to use the same key with a different
   block size, that's fine (that won't cause a security problem), but you'll
-  need to reexpand the key
+  need to re-expand the key
  
   Step 2: expand your tweak (which is public data that modifies how the
   encryption is done; one way of thinking of this is to look at it as another
@@ -71,7 +71,7 @@
   the same expanded tweak.
  
   If you don't have a tweak, you need to expand a 0-length tweak.  Perhaps we
-  could have the encrypt/decrypt routines interpet a NULL tweak as the
+  could have the encrypt/decrypt routines interpret a NULL tweak as the
   0-length; we currently don't bother (as 0-length tweaks may not occur often
   enough)
  
@@ -98,4 +98,3 @@
       FNR_shut(); 
  
   (there's no need to zeroize the expanded tweak)
-
