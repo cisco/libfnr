@@ -36,13 +36,13 @@
  *         2004-09-16T23:59:58
  */
 
+#include <time.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
-#include <openssl/evp.h>
-#include <time.h>
 #include <inttypes.h>
+#include <openssl/evp.h>
 #include "fnr.h"
 
 #define TRUE 1
@@ -207,7 +207,7 @@ int main (int argc, char *argv[])
 			break;
 		}
 	}
-
+	
 	end = clock();
 	if ((end != -1) && (flag == FALSE)) {
 		cpu_time = ((double) (end - start)) / CLOCKS_PER_SEC;
@@ -215,7 +215,7 @@ int main (int argc, char *argv[])
 	} else {
 		printf ("Could not calculate processor time.\n\n");
 	}
-
+	
 	fclose (stream);
 	FNR_release_key (key);
 	FNR_shut ();
