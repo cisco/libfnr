@@ -24,7 +24,7 @@ $ make
 
 ```shell
 $ cd test
-$ ./ipv4test -p password -t  tweak -f raw–ips
+$ ./ipv4test -p password -t  tweak -f raw-ips
 ```
 
 IMPORTANT:  This is an *experimental* cipher, not for production yet.
