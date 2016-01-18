@@ -1,34 +1,30 @@
 /*
- *    libFNR - A reference implementation library for FNR encryption.
- *
- *    FNR represents "Flexible Naor and Reingold" 
- * 
- *    FNR is a small domain block cipher to encrypt small domain
- *    objects ( < 128 bits ) like IPv4, MAC, Credit Card numbers etc.
- * 
- *    FNR is designed by Sashank Dara (sadara@cisco.com), Scott Fluhrer (sfluhrer@cisco.com)
- *
- *    test_timestamp.c is written by Anand Verma [verma.anand09@gmail.com].
- *	  
- *    Thanks to Prakruti C [prak1090@gmail.com] for providing reference 
- *    code in c++ for date format conversions.
- *
- *    Copyright (C) 2014 , Cisco Systems Inc.
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License as published by the Free Software Foundation; either
- *    version 2.1 of the License, or (at your option) any later version.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- */
+*    libFNR - A reference implementation library for FNR encryption mode.
+*
+*    FNR represents "Flexible Naor and Reingold" mode
+*
+*    FNR is a small domain block cipher to encrypt small domain
+*    objects ( < 128 bits ) like IPv4, MAC, Credit Card numbers etc.
+*
+*    FNR is designed by Sashank Dara (sadara@cisco.com), Scott Fluhrer (sfluhrer@cisco.com)
+*
+*    Copyright (C) 2014-2015, Cisco Systems, Inc.
+*
+*    This library is free software; you can redistribute it and/or
+*    modify it under the terms of the GNU Lesser General Public
+*    License as published by the Free Software Foundation; either
+*    version 2.1 of the License, or (at your option) any later version.
+*
+*    This library is distributed in the hope that it will be useful,
+*    but WITHOUT ANY WARRANTY; without even the implied warranty of
+*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+*    Lesser General Public License for more details.
+*
+*    You should have received a copy of the GNU Lesser General Public
+*    License along with this library; if not, write to the Free Software
+*    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+*
+**/
 
 /*
  * @mgurevin : This is a simple benchmark functions for encryprion and decryption methods.
