@@ -38,6 +38,7 @@
 #include <openssl/x509.h>
 #include <openssl/evp.h>
 #include <openssl/hmac.h>
+#include <openssl/rand.h>
 
 void generate_master_key(char* passwd, char*  key) {
   unsigned char salt[16];

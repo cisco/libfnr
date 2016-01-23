@@ -43,6 +43,7 @@
 #include <string.h>
 #include <inttypes.h>
 #include <openssl/evp.h>
+#include <openssl/rand.h>
 #include "fnr.h"
 
 #define TRUE 1
