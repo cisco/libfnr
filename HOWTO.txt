@@ -48,7 +48,7 @@
                                               block_size );
       if (!key) error_handling();
  
-  The block_size parameter is the of blocks we'll encrypt with this key; it
+  The block_size parameter is the number of blocks we'll encrypt with this key; it
   must be a value between 1 and 128 bits.  Why anyone would want to encrypt
   a 1 bit block, I have no idea, but still...
  
